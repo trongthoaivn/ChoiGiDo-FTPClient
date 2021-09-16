@@ -34,6 +34,7 @@
                      <image>
                         <Image url="@Image/icons8_cancel_24px.png" />
                      </image></ImageView>
+                  <Label fx:id="lb_nof" layoutX="159.0" layoutY="362.0" prefHeight="18.0" prefWidth="261.0" />
                </children></AnchorPane>
         </content>
       </TitledPane>

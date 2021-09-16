@@ -4,6 +4,7 @@ import Class.CacheFile;
 import Class.CustomALert;
 import Class.ConnectFTP;
 import MODEL.Protocol;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,6 +36,7 @@ public class Login implements Initializable {
     public ProgressBar Pg_Login;
     public ImageView img_success;
     public ImageView img_fail;
+    public Label lb_nof;
 
     ArrayList<Protocol> protocols = new ArrayList<>();
     CacheFile  cacheFile = new CacheFile();
@@ -90,16 +92,29 @@ public class Login implements Initializable {
         Protocol protocol = (Protocol) lv_workspace.getSelectionModel().getSelectedItem();
         if(protocol!=null){
             Pg_Login.setVisible(true);
+            lb_nof.setText("Connecting to server FTP!");
             Runnable  run = new Runnable() {
                 @Override
                 public void run() {
                     if(connectFTP.ConnectFTP(protocol)){
-                        img_success.setVisible(true);
-                        img_fail.setVisible(false);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                img_success.setVisible(true);
+                                img_fail.setVisible(false);
+                                lb_nof.setText("Login successfully!");
+                            }
+                        });
                     }
                     else {
-                        img_fail.setVisible(true);
-                        img_success.setVisible(false);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                img_fail.setVisible(true);
+                                img_success.setVisible(false);
+                                lb_nof.setText("Connect to server failed!");
+                            }
+                        });
                     }
                 }
             };
@@ -133,6 +148,7 @@ public class Login implements Initializable {
             Pg_Login.setVisible(false);
             img_fail.setVisible(false);
             img_success.setVisible(false);
+            lb_nof.setText("");
         }
 
     }
