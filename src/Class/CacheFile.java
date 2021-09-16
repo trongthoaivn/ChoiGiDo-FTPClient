@@ -1,10 +1,12 @@
-package Cache;
+package Class;
 
 import MODEL.Protocol;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class CacheFile {
@@ -24,7 +26,7 @@ public class CacheFile {
         try {
             Gson json = new Gson();
             FileWriter writer = new FileWriter("cache.json");
-            System.out.println(json.toJson(protocols));
+
             writer.write(json.toJson(protocols));
             writer.close();
             return  true;
@@ -36,7 +38,14 @@ public class CacheFile {
     public ArrayList ReadCache(){
         ArrayList arr = new ArrayList();
         try {
-
+            Gson gson = new Gson();
+            Reader reader = Files.newBufferedReader(Paths.get("cache.json"));
+            ArrayList<Protocol> protocols = gson.fromJson(reader, new TypeToken<ArrayList<Protocol>>() {}.getType());
+            arr = protocols;
+            return arr;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return arr;
         }
     }
 }

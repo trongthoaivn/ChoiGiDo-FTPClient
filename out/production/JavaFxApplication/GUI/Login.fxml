@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="643.0" prefWidth="1037.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CONTROLLER.Login">
@@ -22,11 +23,22 @@
                   <PasswordField fx:id="txt_password" layoutX="246.0" layoutY="233.0" prefHeight="26.0" prefWidth="128.0" />
                   <TextField fx:id="txt_username" layoutX="64.0" layoutY="233.0" prefHeight="26.0" prefWidth="128.0" />
                   <Button fx:id="btn_save" layoutX="63.0" layoutY="296.0" mnemonicParsing="false" onAction="#SaveSession" prefHeight="26.0" prefWidth="76.0" text="Save" />
+                  <ProgressBar fx:id="Pg_Login" layoutX="127.0" layoutY="417.0" prefHeight="18.0" prefWidth="208.0" visible="false" />
+                  <Label layoutX="63.0" layoutY="361.0" prefHeight="18.0" prefWidth="102.0" text="Notification :" />
+                  <ImageView fx:id="img_success" fitHeight="34.0" fitWidth="34.0" layoutX="357.0" layoutY="409.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@Image/icons8_checked_24px.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="img_fail" fitHeight="34.0" fitWidth="34.0" layoutX="356.0" layoutY="408.0" pickOnBounds="true" preserveRatio="true" visible="false">
+                     <image>
+                        <Image url="@Image/icons8_cancel_24px.png" />
+                     </image></ImageView>
                </children></AnchorPane>
         </content>
       </TitledPane>
-      <Button fx:id="btn_login" layoutX="519.0" layoutY="587.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="128.0" text="Login" />
-      <Button fx:id="btn_close" layoutX="683.0" layoutY="587.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="128.0" text="Close" />
+      <Button fx:id="btn_login" layoutX="519.0" layoutY="587.0" mnemonicParsing="false" onAction="#Login" prefHeight="26.0" prefWidth="128.0" text="Login" />
+      <Button fx:id="btn_close" layoutX="683.0" layoutY="587.0" mnemonicParsing="false" onAction="#CloseWorkspace" prefHeight="26.0" prefWidth="128.0" text="Close" />
       <Button fx:id="btn_help" layoutX="846.0" layoutY="587.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="128.0" text="Help" />
    </children>
 </AnchorPane>
