@@ -8,19 +8,19 @@ import java.io.IOException;
 
 public class ConnectFTP {
 
-    public FTPClient ftpClient;
+
     public CustomALert aLert = new CustomALert();
 
 
-    public  Boolean  ConnectFTP(Protocol protocol){
-        ftpClient = new FTPClient();
+    public  Boolean  ConnectFTP(FTPClient ftpClient,Protocol protocol){
+
         try {
 
             ftpClient.setDefaultTimeout(6000);
             ftpClient.connect(protocol.getHostname(), protocol.getPort());
             ftpClient.enterLocalPassiveMode();
             if (!FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
-                DisconnectFTP();
+                DisconnectFTP(ftpClient);
                 return false;
             } else {
                 ftpClient.setSoTimeout(6000);
@@ -36,7 +36,7 @@ public class ConnectFTP {
 
 
     }
-    private void DisconnectFTP() {
+    private void DisconnectFTP(FTPClient ftpClient) {
         if (ftpClient != null && ftpClient.isConnected()) {
             try {
                 ftpClient.logout();

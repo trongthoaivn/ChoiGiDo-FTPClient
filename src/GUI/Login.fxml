@@ -27,12 +27,12 @@
                   <Label layoutX="63.0" layoutY="361.0" prefHeight="18.0" prefWidth="102.0" text="Notification :" />
                   <ImageView fx:id="img_success" fitHeight="34.0" fitWidth="34.0" layoutX="357.0" layoutY="409.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
-                        <Image url="@Image/icons8_checked_24px.png" />
+                        <Image url="@../Image/icons8_ok_48px_1.png" />
                      </image>
                   </ImageView>
                   <ImageView fx:id="img_fail" fitHeight="34.0" fitWidth="34.0" layoutX="356.0" layoutY="408.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <image>
-                        <Image url="@Image/icons8_cancel_24px.png" />
+                        <Image url="@../Image/icons8_cancel_48px.png" />
                      </image></ImageView>
                   <Label fx:id="lb_nof" layoutX="159.0" layoutY="362.0" prefHeight="18.0" prefWidth="261.0" />
                </children></AnchorPane>

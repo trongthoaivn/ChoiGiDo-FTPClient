@@ -8,12 +8,19 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import org.apache.commons.net.ftp.FTPClient;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -42,6 +49,7 @@ public class Login implements Initializable {
     CacheFile  cacheFile = new CacheFile();
     CustomALert  aLert = new CustomALert();
     ConnectFTP connectFTP = new ConnectFTP();
+    FTPClient ftpClient = new FTPClient();
     int protocol_index ;
     int flag_mode=0;
 
@@ -88,7 +96,23 @@ public class Login implements Initializable {
         InitItemWorkspace();
     }
 
-    public void Login(){
+    public void OpenMain(ActionEvent event,FTPClient ftpClient){
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../GUI/Main.fxml"));
+            Parent root = loader.load();
+            Main main = loader.getController();
+            main.InitFTPClient(ftpClient);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root,1480,900));
+            stage.setTitle("FTP Client");
+            stage.show();
+            ((Node)(event.getSource())).getScene().getWindow().hide();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void Login(ActionEvent event){
         Protocol protocol = (Protocol) lv_workspace.getSelectionModel().getSelectedItem();
         if(protocol!=null){
             Pg_Login.setVisible(true);
@@ -96,13 +120,19 @@ public class Login implements Initializable {
             Runnable  run = new Runnable() {
                 @Override
                 public void run() {
-                    if(connectFTP.ConnectFTP(protocol)){
+                    if(connectFTP.ConnectFTP(ftpClient,protocol)){
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
                                 img_success.setVisible(true);
                                 img_fail.setVisible(false);
                                 lb_nof.setText("Login successfully!");
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        OpenMain(event,ftpClient);
+                                    }
+                                });
                             }
                         });
                     }
