@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
@@ -42,7 +43,10 @@
    <center>
       <Pane prefHeight="874.0" prefWidth="660.0" BorderPane.alignment="CENTER">
          <children>
-            <ListView fx:id="lv_FilesFTPClient" layoutX="29.0" layoutY="131.0" prefHeight="714.0" prefWidth="600.0" onMouseClicked="#OpenDirectoy" />
+            <ListView fx:id="lv_FilesFTPClient" layoutX="29.0" layoutY="131.0" onMouseClicked="#OpenDirectoy" prefHeight="714.0" prefWidth="600.0">
+               <contextMenu>
+                  <ContextMenu fx:id="ctm_FTPClient" />
+               </contextMenu></ListView>
             <HBox alignment="CENTER" layoutX="31.0" layoutY="97.0" prefHeight="34.0" prefWidth="598.0">
                <children>
                   <Label prefHeight="18.0" prefWidth="335.0" text="    Name" />
@@ -59,12 +63,12 @@
                         <TextField fx:id="txt_pathClient" layoutX="52.0" prefHeight="26.0" prefWidth="304.0" />
                      </children>
                   </AnchorPane>
-                  <ImageView fx:id="btn_choosefileClient" fitHeight="27.0" fitWidth="41.0" onMouseClicked="#OpenFolderClient"  pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="btn_choosefileClient" fitHeight="27.0" fitWidth="41.0" onMouseClicked="#OpenFolderClient" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Image/icons8_opened_folder_48px.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="btn_backClient" fitHeight="27.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#BackClient">
+                  <ImageView fx:id="btn_backClient" fitHeight="27.0" fitWidth="38.0" onMouseClicked="#BackClient" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Image/icons8_back_64px_1.png" />
                      </image>
@@ -76,7 +80,10 @@
    <right>
       <Pane prefHeight="874.0" prefWidth="654.0" BorderPane.alignment="CENTER">
          <children>
-            <ListView fx:id="lv_FilesFTPServer" layoutX="26.0" layoutY="131.0" prefHeight="714.0" prefWidth="600.0" />
+            <ListView fx:id="lv_FilesFTPServer" layoutX="26.0" layoutY="131.0" onMouseClicked="#OpenDirectoryFTP" prefHeight="714.0" prefWidth="600.0">
+               <contextMenu>
+                  <ContextMenu fx:id="ctm_FTPServer" />
+               </contextMenu></ListView>
             <HBox alignment="CENTER" layoutX="26.0" layoutY="97.0" prefHeight="34.0" prefWidth="598.0">
                <children>
                   <Label prefHeight="18.0" prefWidth="335.0" text="    Name" />
@@ -98,7 +105,7 @@
                         <Image url="@../Image/icons8_opened_folder_48px.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="btn_backServer" fitHeight="27.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="btn_backServer" fitHeight="27.0" fitWidth="38.0" onMouseClicked="#BackServer" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../Image/icons8_back_64px_1.png" />
                      </image>

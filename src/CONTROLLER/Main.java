@@ -7,9 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -40,11 +38,14 @@ public class Main implements Initializable {
     public ImageView btn_backClient;
     public TextField txt_pathClient;
     public TextField txt_pathServer;
+    public ContextMenu ctm_FTPServer;
+    public ContextMenu ctm_FTPClient;
 
 
     CustomALert aLert = new CustomALert();
     ArrayList<HBox> hboxesSv = new ArrayList<>();
     ArrayList<HBox> hboxesCl = new ArrayList<>();
+    FTPClient ftp = new FTPClient();
     String path ="c:\\";
     File f = new File();
 
@@ -52,10 +53,21 @@ public class Main implements Initializable {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                GetAllFileFTP(ftpClient);
+                ftp = ftpClient;
+                GetAllFileFTP();
                 GetAllFileClient(path);
             }
         });
+    }
+    public void InitMenu(){
+        MenuItem Open = new MenuItem("Open");
+        MenuItem Copy = new MenuItem("Copy");
+        MenuItem Cut = new MenuItem("Cut");
+        MenuItem Paste = new MenuItem("Paste");
+        ctm_FTPServer.getItems().add(Open);
+        ctm_FTPServer.getItems().add(Copy);
+        ctm_FTPServer.getItems().add(Cut);
+        ctm_FTPServer.getItems().add(Paste);
     }
     private void GetAllFileClient(String path){
         java.io.File root = new java.io.File(path);
@@ -111,20 +123,24 @@ public class Main implements Initializable {
         return Result;
     }
 
-    public void GetAllFileFTP(FTPClient ftpClient){
+
+
+
+    public void GetAllFileFTP(){
         try {
-            FTPFile[] ftpFiles = ftpClient.listFiles();
+            //ftp.changeWorkingDirectory(path);
+            FTPFile[] ftpFiles = ftp.listFiles();
             for (FTPFile file :ftpFiles){
                     HBox  hBox = f.CreateHbox(
                             String.valueOf(file.getType()),
                             file.getName(),
                             String.valueOf(file.getSize()) +" KB",
-                           FormatTime(ftpClient.getModificationTime(file.getName())),
+                           FormatTime(ftp.getModificationTime(file.getName())),
                             hasPermisionChar(file));
                     hboxesSv.add(hBox);
             }
             lv_FilesFTPServer.setItems(FXCollections.observableList(hboxesSv));
-            txt_pathServer.setText(ftpClient.printWorkingDirectory()+"<root>");
+            txt_pathServer.setText(ftp.printWorkingDirectory());
         } catch (IOException | ParseException e) {
             aLert.Error_Alert(e.getMessage());
         }
@@ -181,9 +197,40 @@ public class Main implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+            InitMenu();
+           
     }
 
 
+    public void OpenDirectoryFTP(MouseEvent mouseEvent) throws IOException {
+        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+            if(mouseEvent.getClickCount() == 2){
+                String foldername = ((Label) lv_FilesFTPServer.getSelectionModel().getSelectedItem().getChildren().get(1)).getText();
+                if (ftp.changeWorkingDirectory(txt_pathServer.getText() +"/"+foldername)){
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            hboxesSv.clear();
+                            GetAllFileFTP();
+                        }
+                    });
+                }else {
+                    aLert.Error_Alert("Can not open file!");
+                }
+            }
+        }
+    }
 
+    public void BackServer(MouseEvent mouseEvent) throws IOException {
+        try {
+            String path = txt_pathServer.getText();
+            if(ftp.changeWorkingDirectory(path.substring(0,path.lastIndexOf("/")))){
+                hboxesSv.clear();
+                GetAllFileFTP();
+            }
+        }catch (Exception e){
+            aLert.Error_Alert(e.toString());
+        }
+
+    }
 }
