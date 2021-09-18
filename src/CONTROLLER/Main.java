@@ -147,20 +147,36 @@ public class Main implements Initializable {
         if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
             if(mouseEvent.getClickCount() == 2){
                 String foldername = ((Label) lv_FilesFTPClient.getSelectionModel().getSelectedItem().getChildren().get(1)).getText();
-                txt_pathClient.setText(txt_pathClient.getText() +"\\"+foldername);
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        hboxesCl.clear();
-                        GetAllFileClient(txt_pathClient.getText());
-                    }
-                });
+                java.io.File file = new java.io.File(txt_pathClient.getText() +"\\"+foldername);
+                if (file.isDirectory()){
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            hboxesCl.clear();
+                            GetAllFileClient(txt_pathClient.getText() +"\\"+foldername);
+                        }
+                    });
+                }else {
+                    aLert.Error_Alert("Can not open file!");
+                }
+
             }
         }
     }
 
     public void BackClient(MouseEvent mouseEvent) {
+        try {
+            String path = txt_pathClient.getText();
 
+            java.io.File file = new java.io.File(path.substring(0,path.lastIndexOf("\\")));
+            if (file.isDirectory()||file.isAbsolute()){
+                hboxesCl.clear();
+                GetAllFileClient(file.getAbsolutePath());
+            }
+
+        }catch (Exception ex){
+
+        }
     }
 
     @Override
