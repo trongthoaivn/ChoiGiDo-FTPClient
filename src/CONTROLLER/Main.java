@@ -40,6 +40,8 @@ public class Main implements Initializable {
     public TextField txt_pathServer;
     public ContextMenu ctm_FTPServer;
     public ContextMenu ctm_FTPClient;
+    public ImageView btn_addfolder;
+    public ImageView btn_remove;
 
 
     CustomALert aLert = new CustomALert();
@@ -231,6 +233,14 @@ public class Main implements Initializable {
         }catch (Exception e){
             aLert.Error_Alert(e.toString());
         }
+
+    }
+
+    public void addfolderFTPServer(MouseEvent mouseEvent) {
+
+    }
+
+    public void removefolderFTPServer(MouseEvent mouseEvent) {
 
     }
 }
