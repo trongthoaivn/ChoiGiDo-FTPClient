@@ -65,12 +65,27 @@ public class Main implements Initializable {
             }
         });
     }
+    public void RefreshFTP(){
+        hboxesSv.clear();
+        GetAllFileFTP();
+    }
+
     public void InitMenu(){
+        MenuItem Refresh = new MenuItem("Refresh");
         MenuItem Open = new MenuItem("Open");
-        MenuItem Copy = new MenuItem("Copy");
-        MenuItem Cut = new MenuItem("Cut");
-        MenuItem Paste = new MenuItem("Paste");
         MenuItem Download = new MenuItem("Download");
+
+        Refresh.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        RefreshFTP();
+                    }
+                });
+            }
+        });
 
         Download.setOnAction(new EventHandler<ActionEvent>(){
 
@@ -80,10 +95,30 @@ public class Main implements Initializable {
             }
         });
 
+        Open.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                String foldername = ((Label) lv_FilesFTPServer.getSelectionModel().getSelectedItem().getChildren().get(1)).getText();
+                try {
+                    if (ftp.changeWorkingDirectory(txt_pathServer.getText() +"/"+foldername)){
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                hboxesSv.clear();
+                                GetAllFileFTP();
+                            }
+                        });
+                    }else {
+                        aLert.Error_Alert("Can not open file!");
+                    }
+                } catch (IOException e) {
+                    aLert.Error_Alert(e.toString());
+                }
+            }
+        });
+
+        ctm_FTPServer.getItems().add(Refresh);
         ctm_FTPServer.getItems().add(Open);
-        ctm_FTPServer.getItems().add(Copy);
-        ctm_FTPServer.getItems().add(Cut);
-        ctm_FTPServer.getItems().add(Paste);
         ctm_FTPServer.getItems().add(Download);
     }
     private void GetAllFileClient(String path){
