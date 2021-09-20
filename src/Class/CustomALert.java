@@ -1,11 +1,19 @@
 package Class;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.TilePane;
+import javafx.stage.Stage;
 
 import java.util.Optional;
 
 public class CustomALert {
+
+
+    Label label = new Label("");
+
     public  void  Infor_Alert(String msg){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Notification");
@@ -52,5 +60,21 @@ public class CustomALert {
             return true;
         }
         return false;
+    }
+
+    public String InputDialog(String msg){
+        TextInputDialog dialog = new TextInputDialog();
+
+        dialog.setTitle("");
+        dialog.setHeaderText(null);
+        dialog.setContentText(msg);
+
+        Optional<String> result = dialog.showAndWait();
+
+
+        result.ifPresent(name -> {
+            label.setText(name);
+        });
+        return label.getText();
     }
 }

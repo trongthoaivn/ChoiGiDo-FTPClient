@@ -156,7 +156,7 @@ public class Login implements Initializable {
 
         if (protocol_index!=-1){
             Protocol  protocol = protocols.get(protocol_index);
-            if(aLert.Confirm_Alert("Are you sure want to close workspace "+ protocol.toString())); {
+            if(aLert.Confirm_Alert("Are you sure want to close workspace "+ protocol.toString())) {
                 protocols.remove(protocol);
                 SaveCache(1);
             }

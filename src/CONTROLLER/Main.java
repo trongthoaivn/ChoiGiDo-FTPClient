@@ -4,6 +4,9 @@ import MODEL.File;
 import Class.*;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -42,6 +45,7 @@ public class Main implements Initializable {
     public ContextMenu ctm_FTPClient;
     public ImageView btn_addfolder;
     public ImageView btn_remove;
+    public ImageView btn_rename;
 
 
     CustomALert aLert = new CustomALert();
@@ -66,10 +70,21 @@ public class Main implements Initializable {
         MenuItem Copy = new MenuItem("Copy");
         MenuItem Cut = new MenuItem("Cut");
         MenuItem Paste = new MenuItem("Paste");
+        MenuItem Download = new MenuItem("Download");
+
+        Download.setOnAction(new EventHandler<ActionEvent>(){
+
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("download");
+            }
+        });
+
         ctm_FTPServer.getItems().add(Open);
         ctm_FTPServer.getItems().add(Copy);
         ctm_FTPServer.getItems().add(Cut);
         ctm_FTPServer.getItems().add(Paste);
+        ctm_FTPServer.getItems().add(Download);
     }
     private void GetAllFileClient(String path){
         java.io.File root = new java.io.File(path);
@@ -236,11 +251,78 @@ public class Main implements Initializable {
 
     }
 
-    public void addfolderFTPServer(MouseEvent mouseEvent) {
-
+    private  void showServerReply() {
+        String[] replies = ftp.getReplyStrings();
+        if (replies != null && replies.length > 0) {
+            for (String aReply : replies) {
+                aLert.Error_Alert(aReply);
+            }
+        }
     }
 
-    public void removefolderFTPServer(MouseEvent mouseEvent) {
+    public void addfolderFTPServer(MouseEvent mouseEvent) throws IOException {
 
+            String foldername = aLert.InputDialog("Folder name :");
+            if(ftp.makeDirectory(txt_pathServer.getText()+"/"+foldername)){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        hboxesSv.clear();
+                        GetAllFileFTP();
+                    }
+                });
+            }else {
+                showServerReply();
+
+            }
+    }
+
+    public void removefolderFTPServer(MouseEvent mouseEvent) throws IOException {
+        try {
+            String foldername = ((Label) lv_FilesFTPServer.getSelectionModel().getSelectedItem().getChildren().get(1)).getText();
+
+            if(aLert.Confirm_Alert("Are you sure to delete : "+foldername)){
+                if (ftp.removeDirectory(txt_pathServer.getText()+"/"+foldername)){
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            hboxesSv.clear();
+                            GetAllFileFTP();
+                        }
+                    });
+                }else if(ftp.deleteFile(txt_pathServer.getText()+"/"+foldername)){
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            hboxesSv.clear();
+                            GetAllFileFTP();
+                        }
+                    });
+                }else
+                    showServerReply();
+            }
+        }catch (Exception e){
+            aLert.Warning_Alert("No item is selected!");
+        }
+    }
+
+    public void RenameFTPServer(MouseEvent mouseEvent) {
+
+        try {
+            String oldname = txt_pathServer.getText()+"/"+((Label) lv_FilesFTPServer.getSelectionModel().getSelectedItem().getChildren().get(1)).getText();
+            String newname = txt_pathServer.getText()+"/"+ aLert.InputDialog("New name :");
+                if (ftp.rename(oldname,newname)){
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            hboxesSv.clear();
+                            GetAllFileFTP();
+                        }
+                    });
+                }else showServerReply();
+
+        }catch (Exception e){
+            aLert.Warning_Alert("No item is selected!");
+        }
     }
 }
